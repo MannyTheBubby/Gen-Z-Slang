@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gen Z Slang Timeline</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+            },
+            colors: {
+              'neon-purple': '#b026ff',
+              'neon-green': '#39ff14',
+              'neon-pink': '#ff00ff',
+              'neon-blue': '#00ffff',
+              'dark-bg': '#0f0f13',
+              'card-bg': '#1a1a20',
+            },
+            animation: {
+              'blob': 'blob 7s infinite',
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'slide-up': 'slideUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              blob: {
+                '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                '100%': { transform: 'translate(0px, 0px) scale(1)' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0f0f13; }
+      ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-dark-bg text-white font-sans antialiased selection:bg-neon-pink selection:text-white overflow-x-hidden">
+
+    <!-- Background Blobs -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+      <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-neon-purple/20 rounded-full blur-[100px] animate-blob"></div>
+      <div class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-neon-blue/10 rounded-full blur-[120px] animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-[-10%] left-[20%] w-[400px] h-[400px] bg-neon-pink/10 rounded-full blur-[100px] animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-dark-bg/80 backdrop-blur-md border-b border-gray-800">
+      <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <i data-lucide="flame" class="text-neon-pink w-8 h-8"></i>
+          <h1 class="text-2xl font-display font-bold tracking-tighter bg-gradient-to-r from-neon-pink to-neon-purple bg-clip-text text-transparent">
+            THE GEN Z SLANG DICTIONARY
+          </h1>
+        </div>
+        
+        <div class="flex items-center gap-4 w-full md:w-auto">
+          <div class="relative flex-1 md:flex-initial">
+            <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4"></i>
+            <input 
+              type="text"
+              id="searchInput"
+              placeholder="Search slang..."
+              class="w-full md:w-64 pl-10 pr-4 py-2 bg-gray-900 border border-gray-700 rounded-full text-sm text-white focus:outline-none focus:border-neon-blue transition-colors"
+            />
+          </div>
+          
+          <button 
+            id="sortButton"
+            class="p-2 rounded-full bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors text-gray-300"
+            title="Sort by year"
+          >
+            <i data-lucide="arrow-down" id="sortIcon" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pt-32 pb-20">
+      <!-- Introduction -->
+      <div id="introSection" class="text-center mb-16 space-y-4 animate-slide-up">
+        <h2 class="text-4xl md:text-6xl font-display font-bold">
+          From <span class="text-neon-green">Yeet</span> to <span class="text-neon-purple">Brainrot</span>
+        </h2>
+        <p class="text-gray-400 max-w-xl mx-auto text-lg">
+          Explore the chronological evolution of Gen Z internet slang. 
+          Click on a card to see definitions and examples.
+        </p>
+      </div>
+
+      <!-- Timeline Container -->
+      <div class="relative" id="timelineContainer">
+        <!-- Vertical Line -->
+        <div class="absolute left-5 md:left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-neon-green via-neon-pink to-neon-purple opacity-80 shadow-[0_0_15px_rgba(176,38,255,0.4)] rounded-full"></div>
+
+        <!-- Cards will be injected here -->
+        <div id="cardsList" class="space-y-4"></div>
+      </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="modalOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" id="modalBackdrop"></div>
+      
+      <div class="relative w-full max-w-2xl bg-card-bg border border-gray-700 rounded-2xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <!-- Header Background -->
+        <div id="modalGradient" class="absolute top-0 left-0 right-0 h-32 pointer-events-none transition-colors"></div>
+
+        <button id="modalClose" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-colors z-20">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="relative z-10 p-8">
+          <div class="flex flex-col gap-2 mb-6">
+             <div class="flex items-center gap-3">
+                <span id="modalYear" class="px-3 py-1 rounded-full border bg-black/30 text-xs font-mono uppercase tracking-widest"></span>
+                <span id="modalVibe" class="text-gray-500 text-xs font-mono uppercase tracking-widest"></span>
+             </div>
+             <h2 id="modalTerm" class="text-5xl md:text-6xl font-display font-bold text-white tracking-tighter"></h2>
+          </div>
+
+          <div class="space-y-8">
+            <!-- Definition -->
+            <section class="bg-black/20 p-6 rounded-xl border border-gray-800">
+              <div class="flex items-center gap-2 mb-3 text-gray-300 font-semibold">
+                <i data-lucide="book-open" class="w-[18px]"></i>
+                <h3>Definition</h3>
+              </div>
+              <p id="modalDef" class="text-xl text-gray-100 font-light leading-relaxed"></p>
+            </section>
+
+            <!-- Example -->
+            <section>
+              <div class="flex items-center gap-2 mb-3 text-gray-300 font-semibold">
+                <i data-lucide="quote" class="w-[18px]"></i>
+                <h3>Used in a sentence</h3>
+              </div>
+              <blockquote id="modalExample" class="border-l-4 border-gray-600 pl-4 py-2 italic text-gray-400 text-lg"></blockquote>
+            </section>
+
+            <!-- Tags -->
+            <div id="modalTags" class="flex flex-wrap gap-2 pb-6"></div>
+
+            <!-- AI Section Removed -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="script.js">
+      
+    </script>
+  </body>
+</html>
